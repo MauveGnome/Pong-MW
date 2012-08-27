@@ -1,5 +1,7 @@
 package pongCore;
 
+import utils.Logger;
+
 import java.net.Socket;
 
 /**
@@ -19,6 +21,6 @@ public class ClientThread extends Thread{
 
     @Override
     public void run() {
-        System.out.println("Got connection from " + socket.getInetAddress().toString());
+        Logger.log("Got connection from " + socket.getInetAddress().toString());
     }
 }

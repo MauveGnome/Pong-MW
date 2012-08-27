@@ -4,22 +4,52 @@
  */
 package pongUI;
 
+import pongCore.ClientThread;
+import pongCore.GameClient;
+import pongCore.GameServer;
+import utils.Logger;
+
 import java.awt.BorderLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import javax.swing.*;
 
 /**
  *
  * @author sam
  */
-public class GameWindow {
-    
+public class GameWindow implements ActionListener{
+
+    private static final String FILE = "file";
+    private static final String CONNECT = "connect";
+    private GameClient gameClient = null;
+    private static final String START_SERVER = "server.start";
+    private GameServer gameServer = null;
+
     public GameWindow() {
         JFrame jFrame = new JFrame();
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        JMenuBar toolBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem connect = new JMenuItem("Connect");
+
+        connect.setActionCommand(CONNECT);
+        connect.addActionListener(this);
+        fileMenu.add(connect);
+
+        JMenuItem startServer = new JMenuItem("Start Server");
+        startServer.setActionCommand(START_SERVER);
+        startServer.addActionListener(this);
+        fileMenu.add(startServer);
+
+        toolBar.add(fileMenu);
+
         JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(toolBar, BorderLayout.NORTH);
 
         jFrame.add(mainPanel);
 
@@ -27,5 +57,29 @@ public class GameWindow {
 
         jFrame.setVisible(true);
     }
-    
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        if(event.getActionCommand().equals(CONNECT)){
+
+            if(gameClient != null){
+                gameClient.setKeepAlive(false);
+            }
+
+            Logger.log("connecting");
+            try {
+                gameClient = new GameClient("localhost", 7777);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        if(event.getActionCommand().equals(START_SERVER)){
+            try {
+                gameServer = new GameServer(7777);
+                Logger.log("started server on " + gameServer.getInfo());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

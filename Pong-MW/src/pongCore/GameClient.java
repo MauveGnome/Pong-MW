@@ -1,5 +1,7 @@
 package pongCore;
 
+import utils.Logger;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -18,7 +20,7 @@ public class GameClient extends Thread{
     private boolean keepAlive = true;
     private String toWrite = null;
 
-    public GameClient(InetAddress inetAddress, int port) throws IOException {
+    public GameClient(String inetAddress, int port) throws IOException {
 
         Socket socket = new Socket(inetAddress, port);
 
@@ -30,7 +32,7 @@ public class GameClient extends Thread{
     }
 
     public void sendMessage(String msg) {
-        System.out.println("Sending : " + msg);
+        Logger.log("Sending : " + msg);
         toWrite = msg;
     }
 
@@ -44,7 +46,7 @@ public class GameClient extends Thread{
                 String incoming;
                 try {
                     while((incoming = input.readLine()) != null){
-                        System.out.println("Got response " + incoming);
+                        Logger.log("Got response " + incoming);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
