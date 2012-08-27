@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pongCore;
 
 import javax.swing.*;
@@ -9,8 +5,7 @@ import java.awt.*;
 import pongUI.*;
 
 /**
- *
- * @author sam
+ * @author MauveGnome
  */
 public class Main {
 
