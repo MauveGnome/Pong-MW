@@ -6,6 +6,7 @@ package pongCore;
 
 import javax.swing.*;
 import java.awt.*;
+import pongUI.*;
 
 /**
  *
@@ -18,16 +19,8 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        JFrame jFrame = new JFrame();
-        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        JPanel mainPanel = new JPanel(new BorderLayout());
-
-        jFrame.add(mainPanel);
-
-        jFrame.setSize(400, 600);
-
-        jFrame.setVisible(true);
+        GameWindow window;
+        window = new GameWindow();
 
     }
 }
