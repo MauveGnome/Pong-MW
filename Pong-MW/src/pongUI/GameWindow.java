@@ -36,12 +36,18 @@ public class GameWindow implements ActionListener{
         JMenuBar toolBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem connect = new JMenuItem("Connect");
+        JMenuItem startServer = new JMenuItem("Start Server");
 
+        /**
+         * Sets up the 'connect' menu item.
+         */
         connect.setActionCommand(CONNECT);
         connect.addActionListener(this);
         fileMenu.add(connect);
 
-        JMenuItem startServer = new JMenuItem("Start Server");
+        /**
+         * Sets up the 'start server' menu item.
+         */
         startServer.setActionCommand(START_SERVER);
         startServer.addActionListener(this);
         fileMenu.add(startServer);
@@ -61,25 +67,35 @@ public class GameWindow implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent event) {
         if(event.getActionCommand().equals(CONNECT)){
-
-            if(gameClient != null){
-                gameClient.setKeepAlive(false);
-            }
-
-            Logger.log("connecting");
-            try {
-                gameClient = new GameClient("localhost", 7777);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            connect();
         }
-        if(event.getActionCommand().equals(START_SERVER)){
-            try {
-                gameServer = new GameServer(7777);
-                Logger.log("started server on " + gameServer.getInfo());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        
+        if(event.getActionCommand().equals(START_SERVER)) {
+            startServer();
+        }
+    }
+    
+    public void startServer() {
+        try {
+            gameServer = new GameServer(7777);
+            Logger.log("started server on " + gameServer.getInfo());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void connect() {
+        if(gameClient != null){
+            gameClient.setKeepAlive(false);
+        }
+
+        Logger.log("connecting");
+        try {
+            gameClient = new GameClient("localhost", 7777);
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 }
