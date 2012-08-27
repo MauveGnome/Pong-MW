@@ -4,6 +4,9 @@
  */
 package pongCore;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
  *
  * @author sam
@@ -14,6 +17,17 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+
+        JFrame jFrame = new JFrame();
+        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        jFrame.add(mainPanel);
+
+        jFrame.setSize(400, 600);
+
+        jFrame.setVisible(true);
+
     }
 }
