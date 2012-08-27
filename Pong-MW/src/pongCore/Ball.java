@@ -9,5 +9,7 @@ package pongCore;
  * @author sam
  */
 public class Ball {
+    int xPos, yPos;
+    int direction;
     
 }

@@ -9,5 +9,5 @@ package pongCore;
  * @author sam
  */
 public class Paddle {
-    
+    int yPos;
 }
