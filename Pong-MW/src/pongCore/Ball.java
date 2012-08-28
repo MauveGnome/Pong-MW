@@ -37,11 +37,18 @@ public class Ball {
         return new Point(getXPos(), getYPos());        
     }
     
-        /**
+    /**
      * Returns the direction of the Ball
      * @return the direction of the ball
      */
     public int getDirection() {
         return this.direction;
+    }
+    
+    /**
+     * Sets a the direction of the ball
+     */
+    public void setDirection(int newDirection) {
+        this.direction = newDirection;
     }
 }
