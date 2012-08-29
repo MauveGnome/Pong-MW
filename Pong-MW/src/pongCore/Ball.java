@@ -7,7 +7,7 @@ import java.awt.*;
  */
 public class Ball {
     int xPos, yPos;
-    int direction;
+    int speed, direction;
     
     public Ball() {
         
@@ -46,9 +46,46 @@ public class Ball {
     }
     
     /**
+     * Returns the current speed of the ball
+     * @return the speed of the ball
+     */
+    private int getSpeed() {
+      return this.speed;
+    }
+    
+    /**
+     * Sets a new X-coordinate for the ball
+     * @param n the new x-coordinate of the ball 
+     */
+    private void setXPos(int n) {
+      this.xPos = n;
+    }
+    
+    /**
+     * Sets a new Y-coordinate for the ball
+     * @param n the new y-coordinate for the ball
+     */
+    private void setYPos(int n) {
+      this.yPos = n;
+    }
+    
+    /**
      * Sets a the direction of the ball
      */
     public void setDirection(int newDirection) {
         this.direction = newDirection;
+    }
+    
+    public void moveForward() {
+      int newXPos, newYPos;
+      Double xPosCalc, yPosCalc;
+      
+      xPosCalc = getXPos() + (Math.sin(direction) * getSpeed());
+      yPosCalc = getYPos() + (Math.cos(direction) * getSpeed());
+      newXPos = xPosCalc.intValue();
+      newYPos = yPosCalc.intValue();      
+      
+      setXPos(newXPos);
+      setYPos(newYPos);
     }
 }

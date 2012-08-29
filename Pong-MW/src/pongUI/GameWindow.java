@@ -37,6 +37,7 @@ public class GameWindow implements ActionListener{
         JMenu fileMenu = new JMenu("File");
         JMenuItem connect = new JMenuItem("Connect");
         JMenuItem startServer = new JMenuItem("Start Server");
+        
 
         /**
          * Sets up the 'connect' menu item.
