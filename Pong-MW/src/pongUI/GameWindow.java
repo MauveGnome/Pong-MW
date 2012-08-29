@@ -65,6 +65,10 @@ public class GameWindow implements ActionListener{
         jFrame.setVisible(true);
     }
 
+    /**
+     * Code to run when an event occurs on the main form.
+     * @param event 
+     */
     @Override
     public void actionPerformed(ActionEvent event) {
         if(event.getActionCommand().equals(CONNECT)){
@@ -76,6 +80,9 @@ public class GameWindow implements ActionListener{
         }
     }
     
+    /**
+     * Method to run when a new server is started.
+     */
     public void startServer() {
         try {
             gameServer = new GameServer(7777);
@@ -86,17 +93,20 @@ public class GameWindow implements ActionListener{
         }
     }
     
+    /**
+     * Method to run when anew connection is made.
+     */
     public void connect() {
         if(gameClient != null){
             gameClient.setKeepAlive(false);
         }
 
-        Logger.log("connecting");
+        Logger.log("connecting");  //places a line in the log to show a connection is being made.
         try {
             gameClient = new GameClient("localhost", 7777);
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace();   //if the connection fails an error report is generated.
         }
     }
 }

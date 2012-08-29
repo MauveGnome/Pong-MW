@@ -28,7 +28,7 @@ public class GameServer extends Thread{
     public void stopServer(){
         allowConnections = false;
     }
-
+    
     public void run(){
         while(allowConnections){
             Socket socket = null;
