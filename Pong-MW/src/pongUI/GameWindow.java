@@ -58,10 +58,13 @@ public class GameWindow implements ActionListener{
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(toolBar, BorderLayout.NORTH);
+
+        PongBoard pongBoard = new PongBoard();
+        mainPanel.add(pongBoard, BorderLayout.CENTER);
         
         jFrame.add(mainPanel);
 
-        jFrame.setSize(400, 600);
+        jFrame.setSize(600, 400);
 
         jFrame.setVisible(true);
     }
