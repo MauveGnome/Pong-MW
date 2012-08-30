@@ -3,6 +3,8 @@ package pongCore;
 import java.awt.*;
 
 /**
+ * The ball class represents a ball with an x-y coordinate as well as
+ * speed and direction.
  * @author MauveGnome
  */
 public class Ball {
@@ -10,7 +12,10 @@ public class Ball {
     int speed, direction;
     
     public Ball() {
-        
+        xPos = (int)(Math.random() * 200) + 100;
+        yPos = (int)(Math.random() * 200) + 100;
+        speed = 10;
+        direction = (int)(Math.random() * 360);
     }
     
     /**
@@ -70,12 +75,26 @@ public class Ball {
     }
     
     /**
-     * Sets a the direction of the ball
+     * Sets a the direction of the ball.
      */
     public void setDirection(int newDirection) {
         this.direction = newDirection;
+        this.setValidDirection();
     }
     
+    /**
+     * If the direction value of the ball is outside the range 0-359
+     * it is reset to an equivalent value inside this range.
+     */
+    public void setValidDirection() {
+       if (this.getDirection() < 0 || this.getDirection() > 359) {
+          this.setDirection(this.getDirection() % 360);
+       }
+    }
+    
+    /**
+     * Changes the coordinates of the ball based on its speed and direction.
+     */
     public void moveForward() {
       int newXPos, newYPos;
       Double xPosCalc, yPosCalc;

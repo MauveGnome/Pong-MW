@@ -4,6 +4,7 @@
  */
 package pongUI;
 
+import pongCore.Ball;
 import pongCore.ClientThread;
 import pongCore.GameClient;
 import pongCore.GameServer;
@@ -57,7 +58,7 @@ public class GameWindow implements ActionListener{
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(toolBar, BorderLayout.NORTH);
-
+        
         jFrame.add(mainPanel);
 
         jFrame.setSize(400, 600);
@@ -94,7 +95,7 @@ public class GameWindow implements ActionListener{
     }
     
     /**
-     * Method to run when anew connection is made.
+     * Method to run when a new connection is made.
      */
     public void connect() {
         if(gameClient != null){

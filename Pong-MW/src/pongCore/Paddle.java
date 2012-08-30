@@ -9,7 +9,10 @@ public class Paddle {
     int upperLimit, lowerLimit;
     
     public Paddle() {
-        
+        yPos = 50;
+        speed = 10;
+        upperLimit = 0;
+        lowerLimit = 500;    
     }
     
     /**

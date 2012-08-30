@@ -10,27 +10,37 @@ import java.util.ArrayList;
  * User: ian
  * Date: 27/08/2012
  * Time: 22:54
- * To change this template use File | Settings | File Templates.
  */
 public class GameServer extends Thread{
 
-    private boolean allowConnections = true;
-    private ArrayList<ClientThread> clientThreads;
-    private ServerSocket serverSocket;
+    private boolean allowConnections = true;             //essentially a server on/off switch.
+    private ArrayList<ClientThread> clientThreads;       //stores a collection of all connected clients.
+    private ServerSocket serverSocket;                   //listens to client requests and responds appropriately.
 
     public GameServer(int portNumber) throws IOException {
         serverSocket = new ServerSocket(portNumber);
 
         clientThreads = new ArrayList<ClientThread>();
+        
+        /*
+         * starts a new thread to run the server in to allow the
+         * rest of the program to continue running
+         */
         this.start();
     }
-
+    
+    /**
+     * Stops the server. Redundant comment.
+     */
     public void stopServer(){
         allowConnections = false;
     }
     
+    /**
+     * 
+     */
     public void run(){
-        while(allowConnections){
+        while(allowConnections){       //sits around looping as long as the server is not shut down.
             Socket socket = null;
             try {
                 socket = serverSocket.accept();
@@ -38,13 +48,20 @@ public class GameServer extends Thread{
                 e.printStackTrace();
             }
 
-            ClientThread clientThread = new ClientThread(socket);
-            clientThread.start();
-            clientThreads.add(clientThread);
+            ClientThread clientThread = new ClientThread(socket);  //creates a new clientThread object. Why you'd
+                                                                   //want to do this in every loop I don't know.
+            clientThread.start();                                  //starts a new thread for the new client
+            clientThreads.add(clientThread);                       //add the new client to the list of clients
+        
         }
     }
 
+    /**
+     * Returns a string containing information about the server
+     * @return server info string.
+     */
     public String getInfo() {
         return serverSocket.toString();
     }
+    
 }

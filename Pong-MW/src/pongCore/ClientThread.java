@@ -23,4 +23,8 @@ public class ClientThread extends Thread{
     public void run() {
         Logger.log("Got connection from " + socket.getInetAddress().toString());
     }
+    
+    public Socket getSocket() {
+       return this.socket;
+    }
 }

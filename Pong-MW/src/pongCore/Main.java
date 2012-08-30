@@ -15,8 +15,11 @@ public class Main {
     public static void main(String[] args) {
 
         GameWindow window;
+        Ball ball = new Ball();
+        Paddle player1 = new Paddle();
+        Paddle player2 = new Paddle();
         
         window = new GameWindow();
-
+        
     }
 }

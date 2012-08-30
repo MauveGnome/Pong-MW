@@ -1,9 +1,7 @@
 package pongCore;
 
 import utils.Logger;
-
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -28,42 +26,65 @@ public class GameClient extends Thread{
         output = new PrintWriter(socket.getOutputStream());
 
         this.sendMessage("hello");
-
     }
 
+    /**
+     * Sends and logs a given message.
+     * @param msg message to send.
+     */
     public void sendMessage(String msg) {
         Logger.log("Sending : " + msg);
         toWrite = msg;
     }
 
+    @Override
     public void run(){
-        while(keepAlive){
-            String toWrite = getToWrite();
-            if(!toWrite.equals("")){
-                output.write(toWrite);
-                clearMsg();
+        while(keepAlive){                             //code continues looping until killed.
 
-                String incoming;
-                try {
-                    while((incoming = input.readLine()) != null){
-                        Logger.log("Got response " + incoming);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            String outgoing = getToWrite();
+            String incoming;
+            
+            if(!outgoing.equals("")){                 //runs code if there is a message to send.
+               output.write(outgoing);
+               clearMsg();                            //writes message to output stream then clears it.
+
+               
+               /**
+                * Reads and logs any incoming messages.
+                */
+               try {
+                  while((incoming = input.readLine()) != null){
+                     Logger.log("Got response " + incoming);
+                  }
+               } catch (IOException e) {
+                     e.printStackTrace();
+               }
             }
         }
     }
 
+    /**
+     * Getter method for the outgoing message.
+     * @return the outgoing message.
+     */
     private String getToWrite() {
         return toWrite;
     }
 
+    /**
+     * Wipes the outgoing message.
+     */
     private void clearMsg(){
         toWrite = "";
     }
 
+    /**
+     * Controls whether the client should continue running.
+     * @param keepAlive true keeps the client running and false stops it.
+     */
     public void setKeepAlive(boolean keepAlive) {
         this.keepAlive = keepAlive;
     }
+    
+    
 }
