@@ -78,4 +78,8 @@ public class Paddle {
         
         return validMove;
     }
+
+    public void setY(int yPos) {
+        this.yPos = yPos;
+    }
 }
