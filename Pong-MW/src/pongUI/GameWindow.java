@@ -10,9 +10,10 @@ import pongCore.GameClient;
 import pongCore.GameServer;
 import utils.Logger;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -38,7 +39,6 @@ public class GameWindow implements ActionListener{
         JMenu fileMenu = new JMenu("File");
         JMenuItem connect = new JMenuItem("Connect");
         JMenuItem startServer = new JMenuItem("Start Server");
-        
 
         /**
          * Sets up the 'connect' menu item.
@@ -60,12 +60,16 @@ public class GameWindow implements ActionListener{
         mainPanel.add(toolBar, BorderLayout.NORTH);
 
         PongBoard pongBoard = new PongBoard();
+        BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+// Create a new blank cursor.
+        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+                cursorImg, new Point(0, 0), "blank cursor");
+        pongBoard.setCursor(blankCursor);
         mainPanel.add(pongBoard, BorderLayout.CENTER);
-        
+
         jFrame.add(mainPanel);
 
         jFrame.setSize(600, 400);
-
         jFrame.setVisible(true);
     }
 

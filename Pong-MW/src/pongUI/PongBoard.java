@@ -45,21 +45,29 @@ public class PongBoard extends JPanel implements Runnable, MouseMotionListener{
 
 
     long interval = 50;
-    Date date = new Date();
+    int count = 0;
     @Override
     public void run() {
         while(shouldRun){
-
 
             try {
                 Thread.sleep(interval);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            long timeBefore = date.getTime();
+            long timeBefore = System.currentTimeMillis();
             repaint();
-            long timeAfter = date.getTime();
-            interval = timeAfter - timeBefore;
+            long timeAfter = System.currentTimeMillis();
+            long timeTaken = timeAfter - timeBefore;
+            if(timeTaken > 50){
+                interval = timeTaken;
+            }
+
+            count ++;
+            if(count > 100){
+                Logger.log("Time between repaints " + interval);
+                count = 0;
+            }
 
         }
     }
