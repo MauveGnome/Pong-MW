@@ -1,5 +1,7 @@
 package pongCore;
 
+import utils.Logger;
+
 /**
  * @author MauveGnome
  */
@@ -50,6 +52,7 @@ public class Paddle {
      * @return Returns true if move is valid
      */
     public boolean moveUp() {
+        Logger.log("up");
         boolean validMove;
         
         if (getYPos() - getSpeed() >= upperLimit) {
@@ -67,6 +70,7 @@ public class Paddle {
      * @return Returns true if move is valid
      */
     public boolean moveDown() {
+        Logger.log("down");
         boolean validMove;
         
         if (getYPos() + getSpeed() <= upperLimit) {

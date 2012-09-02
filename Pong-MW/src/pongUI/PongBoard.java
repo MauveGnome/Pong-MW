@@ -5,6 +5,8 @@ import utils.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.Date;
@@ -16,7 +18,7 @@ import java.util.Date;
  * Time: 18:50
  * To change this template use File | Settings | File Templates.
  */
-public class PongBoard extends JPanel implements Runnable, MouseMotionListener{
+public class PongBoard extends JPanel implements Runnable, MouseMotionListener, KeyListener {
 
 
     private Player primaryPlayer;
@@ -26,7 +28,8 @@ public class PongBoard extends JPanel implements Runnable, MouseMotionListener{
     public PongBoard(){
         this.setBackground(Color.GREEN);
         this.addMouseMotionListener(this);
-
+        this.addKeyListener(this);
+        this.requestFocus();
 
         //For testing, we won't create players here
         primaryPlayer = new Player("player one", null);
@@ -83,17 +86,35 @@ public class PongBoard extends JPanel implements Runnable, MouseMotionListener{
     }
 
     @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
+    public void mouseDragged(MouseEvent e) {}
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        Logger.log("Mouse Y" + e.getY());
+//        Logger.log("Mouse Y" + e.getY());
         primaryPlayer.setPaddleY(e.getY());
     }
 
     public void setShouldRun(boolean shouldRun) {
         this.shouldRun = shouldRun;
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        Logger.log("key pressed");
+        if(e.getKeyCode() == KeyEvent.VK_UP){
+            //up
+            primaryPlayer.getPaddle().moveUp();
+        }
+        if(e.getKeyCode() == KeyEvent.VK_DOWN){
+            //down
+            primaryPlayer.getPaddle().moveDown();
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
 }

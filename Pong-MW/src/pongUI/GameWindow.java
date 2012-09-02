@@ -4,10 +4,7 @@
  */
 package pongUI;
 
-import pongCore.Ball;
-import pongCore.ClientThread;
-import pongCore.GameClient;
-import pongCore.GameServer;
+import pongCore.*;
 import utils.Logger;
 
 import java.awt.*;
@@ -17,7 +14,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.util.Properties;
 import javax.swing.*;
+import javax.swing.plaf.OptionPaneUI;
 
 /**
  *
@@ -30,8 +29,12 @@ public class GameWindow implements ActionListener{
     private GameClient gameClient = null;
     private static final String START_SERVER = "server.start";
     private GameServer gameServer = null;
+    private static final String OPTIONS = "options";
+    private Properties properties;
 
-    public GameWindow() {
+    public GameWindow(Properties properties) {
+        this.properties = properties;
+
         JFrame jFrame = new JFrame();
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,6 +58,13 @@ public class GameWindow implements ActionListener{
         fileMenu.add(startServer);
 
         toolBar.add(fileMenu);
+
+        JMenu settingsMenu = new JMenu("Settings");
+        JMenuItem options = new JMenuItem("Options...");
+        options.setActionCommand(OPTIONS);
+        options.addActionListener(this);
+        settingsMenu.add(options);
+        toolBar.add(settingsMenu);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(toolBar, BorderLayout.NORTH);
@@ -86,14 +96,23 @@ public class GameWindow implements ActionListener{
         if(event.getActionCommand().equals(START_SERVER)) {
             startServer();
         }
+
+        if(event.getActionCommand().equals(OPTIONS)) {
+            showOptionsPane();
+        }
     }
-    
+
+    private void showOptionsPane() {
+        OptionsPane optionPane = new OptionsPane(properties);
+    }
+
     /**
      * Method to run when a new server is started.
      */
     public void startServer() {
         try {
-            gameServer = new GameServer(7777);
+            int port = Integer.parseInt(properties.getProperty(Main.PORT));
+            gameServer = new GameServer(port);
             Logger.log("started server on " + gameServer.getInfo());
         }
         catch (IOException e) {
@@ -111,7 +130,9 @@ public class GameWindow implements ActionListener{
 
         Logger.log("connecting");  //places a line in the log to show a connection is being made.
         try {
-            gameClient = new GameClient("localhost", 7777);
+            int port = Integer.parseInt(properties.getProperty(Main.PORT));
+            String address = properties.getProperty(Main.ADDRESS);
+            gameClient = new GameClient(address, port);
         }
         catch (IOException ex) {
             ex.printStackTrace();   //if the connection fails an error report is generated.
