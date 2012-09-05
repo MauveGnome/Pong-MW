@@ -30,22 +30,24 @@ public class GameWindow implements ActionListener{
     private static final String START_SERVER = "server.start";
     private GameServer gameServer = null;
     private static final String OPTIONS = "options";
-    private Properties properties;
+    private ClientController clientController;
+    private static final String EXIT = "exit";
+    private static final String LOCAL = "local";
+    private Game currentGame = null;
 
-    public GameWindow(Properties properties) {
-        this.properties = properties;
+    public GameWindow(ClientController clientController) {
+        this.clientController = clientController;
 
         JFrame jFrame = new JFrame();
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JMenuBar toolBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
-        JMenuItem connect = new JMenuItem("Connect");
-        JMenuItem startServer = new JMenuItem("Start Server");
 
         /**
          * Sets up the 'connect' menu item.
          */
+        JMenuItem connect = new JMenuItem("Connect To Server");
         connect.setActionCommand(CONNECT);
         connect.addActionListener(this);
         fileMenu.add(connect);
@@ -53,11 +55,24 @@ public class GameWindow implements ActionListener{
         /**
          * Sets up the 'start server' menu item.
          */
+        JMenuItem startServer = new JMenuItem("Start Server");
         startServer.setActionCommand(START_SERVER);
         startServer.addActionListener(this);
         fileMenu.add(startServer);
 
+        JMenuItem exit = new JMenuItem("Exit");
+        exit.setActionCommand(EXIT);
+        exit.addActionListener(this);
+        fileMenu.add(exit);
+
         toolBar.add(fileMenu);
+
+        JMenu gameMenu = new JMenu("Game");
+        JMenuItem localGame = new JMenuItem("Start Local Game");
+        localGame.setActionCommand(LOCAL);
+        localGame.addActionListener(this);
+        gameMenu.add(localGame);
+        toolBar.add(gameMenu);
 
         JMenu settingsMenu = new JMenu("Settings");
         JMenuItem options = new JMenuItem("Options...");
@@ -69,7 +84,8 @@ public class GameWindow implements ActionListener{
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(toolBar, BorderLayout.NORTH);
 
-        PongBoard pongBoard = new PongBoard();
+        PongBoard pongBoard = new PongBoard(clientController);
+        clientController.addUpdateable(pongBoard);
         BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 // Create a new blank cursor.
         Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
@@ -97,13 +113,20 @@ public class GameWindow implements ActionListener{
             startServer();
         }
 
+        if(event.getActionCommand().equals(LOCAL)) {
+            clientController.setCurrentGame(new LocalGame());
+        }
+
         if(event.getActionCommand().equals(OPTIONS)) {
             showOptionsPane();
+        }
+        if(event.getActionCommand().equals(EXIT)) {
+            System.exit(0);
         }
     }
 
     private void showOptionsPane() {
-        OptionsPane optionPane = new OptionsPane(properties);
+        OptionsPane optionPane = new OptionsPane(clientController.getProperties());
     }
 
     /**
@@ -111,7 +134,7 @@ public class GameWindow implements ActionListener{
      */
     public void startServer() {
         try {
-            int port = Integer.parseInt(properties.getProperty(Main.PORT));
+            int port = Integer.parseInt(clientController.getProperties().getProperty(Main.PORT));
             gameServer = new GameServer(port);
             Logger.log("started server on " + gameServer.getInfo());
         }
@@ -130,9 +153,11 @@ public class GameWindow implements ActionListener{
 
         Logger.log("connecting");  //places a line in the log to show a connection is being made.
         try {
-            int port = Integer.parseInt(properties.getProperty(Main.PORT));
-            String address = properties.getProperty(Main.ADDRESS);
+            int port = Integer.parseInt(clientController.getProperties().getProperty(Main.PORT));
+            String address = clientController.getProperties().getProperty(Main.ADDRESS);
             gameClient = new GameClient(address, port);
+
+            clientController.setCurrentGame(gameClient.getGame());
         }
         catch (IOException ex) {
             ex.printStackTrace();   //if the connection fails an error report is generated.

@@ -21,8 +21,6 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
 
-
-
         Main main = new Main();
 
     }
@@ -36,7 +34,10 @@ public class Main {
         Paddle player1 = new Paddle();
         Paddle player2 = new Paddle();
 
-        window = new GameWindow(properties);
+        ClientController clientController = new ClientController();
+        clientController.setProperties(properties);
+
+        window = new GameWindow(clientController);
     }
 
     private Properties getProperties() throws IOException {

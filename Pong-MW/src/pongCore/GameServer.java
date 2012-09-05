@@ -17,6 +17,8 @@ public class GameServer extends Thread{
     private ArrayList<ClientThread> clientThreads;       //stores a collection of all connected clients.
     private ServerSocket serverSocket;                   //listens to client requests and responds appropriately.
 
+    public static final String ACCEPTED_TO_JOIN = "accept";
+
     public GameServer(int portNumber) throws IOException {
         serverSocket = new ServerSocket(portNumber);
 
@@ -48,11 +50,15 @@ public class GameServer extends Thread{
                 e.printStackTrace();
             }
 
-            ClientThread clientThread = new ClientThread(socket);  //creates a new clientThread object. Why you'd
-                                                                   //want to do this in every loop I don't know.
-            clientThread.start();                                  //starts a new thread for the new client
-            clientThreads.add(clientThread);                       //add the new client to the list of clients
-        
+            try {
+                ClientThread clientThread = null;  //creates a new clientThread object
+                clientThread = new ClientThread(socket);
+                clientThread.start();                                  //starts a new thread for the new client
+                clientThreads.add(clientThread);                       //add the new client to the list of clients
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
